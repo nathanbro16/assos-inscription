@@ -1,25 +1,37 @@
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
+
+import ListItem from '@mui/material/ListItem';
+import {
+  ListItemText, 
+  ListItemIcon, 
+  ListItemButton,
+  List,
+  Tooltip, 
+  Menu,
+  Toolbar,
+  MenuItem,
+  IconButton,
+  Divider,
+  Typography,
+  CssBaseline,
+  Box
+} from '@mui/material';
+
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import {ListItemText, ListItemButton, Tooltip} from '@mui/material';
-
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import AppRegistrationRoundedIcon from '@mui/icons-material/AppRegistrationRounded';
 
 import { Link as RouterLink, Route, MemoryRouter } from 'react-router-dom';
+
+import { useAuth } from '@/hooks/auth'
+
 
 const links = [
   { to: '/dashboard', text: 'Dashboard', icon: <DashboardRoundedIcon />},
@@ -125,6 +137,17 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 function NavBar({ open, header, setOpen, theme, DrawerHeader }) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const { logout } = useAuth();
+
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -140,9 +163,44 @@ function NavBar({ open, header, setOpen, theme, DrawerHeader }) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {header}
           </Typography>
+          <div>
+            <IconButton 
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={logout}>
+                <ListItemIcon>
+                  <LogoutRoundedIcon />
+                </ListItemIcon>
+                <ListItemText>Déconnection</ListItemText>
+                
+              </MenuItem>
+            </Menu>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer

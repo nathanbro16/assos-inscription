@@ -10,8 +10,10 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-
-mix.js('resources/js/index.js', 'public/js')
+mix.browserSync({
+    proxy:'https://assos-inscription.test'
+})
+mix.ts('resources/js/index.tsx', 'public/js')
     .react()
     .postCss('resources/css/index.css', 'public/css', [
         require('postcss-import'),
