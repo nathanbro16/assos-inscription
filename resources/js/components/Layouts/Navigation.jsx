@@ -30,9 +30,6 @@ import AppRegistrationRoundedIcon from '@mui/icons-material/AppRegistrationRound
 
 import { Link as RouterLink, Route, MemoryRouter } from 'react-router-dom';
 
-import { useAuth } from '@/hooks/auth'
-
-
 const links = [
   { to: '/dashboard', text: 'Dashboard', icon: <DashboardRoundedIcon />},
   { to: '/dashboard/register', text: 'Inscription', icon: <AppRegistrationRoundedIcon />}
@@ -136,10 +133,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-function NavBar({ open, header, setOpen, theme, DrawerHeader }) {
+function NavBar({ open, header, setOpen, theme, DrawerHeader, logout }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const { logout } = useAuth();
-
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);

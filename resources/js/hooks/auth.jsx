@@ -3,7 +3,7 @@ import axios from '@/lib/axios'
 import {useEffect} from 'react'
 import {useNavigate, useParams} from 'react-router-dom';
 
-export const useAuth = ({middleware, redirectIfAuthenticated} = {}) => {
+export const useAuth = ({middleware, redirectIfAuthenticated}) => {
   let navigate = useNavigate();
   let params = useParams();
 
@@ -104,3 +104,4 @@ export const useAuth = ({middleware, redirectIfAuthenticated} = {}) => {
     logout
   }
 }
+

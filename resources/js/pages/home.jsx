@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/hooks/auth'
 
-function Home() {
+export default function Home() {
   const { user } = useAuth({ middleware: 'guest' })
 
   return (
@@ -53,5 +53,3 @@ function Home() {
     </div>
   );
 }
-
-export default Home;

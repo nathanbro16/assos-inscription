@@ -21,7 +21,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 const AppLayout = () => {
   
-  const { user } = useAuth({ middleware: 'auth' })
+  const { user, logout } = useAuth({ middleware: 'auth' })
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [header, setHeader] = React.useState('');
@@ -30,7 +30,7 @@ const AppLayout = () => {
   return (
       <Box sx={{ display: 'flex' }}>
 
-        <NavBar open={open} header={header} setOpen={setOpen} theme={theme} DrawerHeader={DrawerHeader}/>
+        <NavBar open={open} header={header} setOpen={setOpen} theme={theme} DrawerHeader={DrawerHeader} logout={logout}/>
         <Box component="main" sx={{ flexGrow: 1}}>          
           <DrawerHeader />
           {
