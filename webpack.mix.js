@@ -13,7 +13,7 @@ const mix = require('laravel-mix');
 mix.browserSync({
     proxy:'https://assos-inscription.test'
 })
-mix.ts('resources/js/index.tsx', 'public/js')
+mix.js('resources/js/index.jsx', 'public/js')
     .react()
     .postCss('resources/css/index.css', 'public/css', [
         require('postcss-import'),
@@ -22,7 +22,7 @@ mix.ts('resources/js/index.tsx', 'public/js')
     ])
     .alias({
         '@': 'resources/js',
-        '#': 'resources/css',
+        '#css': 'resources/css',
     });
 
     if (mix.inProduction()) {
