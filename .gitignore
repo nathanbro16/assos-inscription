@@ -1,5 +1,5 @@
 /node_modules
-public/
+/public
 /storage/*.key
 /vendor
 .env
@@ -13,3 +13,6 @@ yarn-error.log
 /.vscode
 
 yarn.lock
+public/css/index.css
+public/js/index.js
+public/js/index.js
