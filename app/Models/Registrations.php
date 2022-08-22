@@ -24,6 +24,7 @@ class Registrations extends Model
 
     ];
 
+
     public function Families() {
         return $this->hasMany('MembersFamilies', 'registrations_id');
     }

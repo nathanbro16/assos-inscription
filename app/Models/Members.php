@@ -9,5 +9,16 @@ class Members extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'members_families_id',
+        'first_name',
+        'last_name',
+        'birth',
+        'address',
+        'phone',
+        'email',
+        'rank',
+
+    ];
 
 }

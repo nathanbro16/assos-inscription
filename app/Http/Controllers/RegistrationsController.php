@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Registrations;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class RegistrationsController extends Controller
 {
@@ -37,7 +39,62 @@ class RegistrationsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $this->validate($request, [
+            'Titre' => 'required|string',
+            'IsSuccess' => 'required|string',
+            //'CheckList' => 'required|json',
+            'DateOpen' => 'required|date',
+            'DateClosed'=> 'required|date|after:DateOpen',
+            'IsOpen' => 'required|boolean'
+        ]);
+
+        $registrations = Registrations::create([
+            'Title' => $request->Titre,
+            'IsSuccess' => $request->IsSuccess,
+            //'CheckList' => $request->CheckList,
+            'CheckList'=> null,
+            'DateOpen' => $request->DateOpen,
+            'DateClosed'=> $request->DateClosed,
+            'IsOpen' => $request->IsOpen,
+        ]);
+
+        $result = $registrations;
+
+        return response()->json(['success' => $result ], 200);
+
+    }
+    /**
+     * Check the specified resource are exist.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search($slug)
+    {
+        if (is_string($slug)) {
+            $search = Str::replace('-', ' ', $slug);
+            $regist = Registrations::query()
+                ->where('Title', $search)
+                ->get();
+        }
+
+        if (is_numeric($slug)) {
+            $regist = Registrations::query()
+                ->where('id', $slug)
+                ->get();
+        }
+
+        if ($regist->count() === 0) {
+            return response()->json(['Error' => "Aucun formulaire trouvé !" ], 404);
+        }
+
+        if ($regist->count() > 1) {
+            return response()->json(['Error' => "Trop de formulaire ont le même titre !" ], 404);
+        }
+        
+        return response()->json(['success' => [
+            "List" => $regist
+        ] ], 200);
     }
 
     /**
@@ -48,7 +105,6 @@ class RegistrationsController extends Controller
      */
     public function show(Registrations $registrations)
     {
-        //
     }
 
     /**
