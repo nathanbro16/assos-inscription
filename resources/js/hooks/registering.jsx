@@ -3,11 +3,12 @@ import axios from '@/lib/axios'
 
 import { 
     useQuery,  
-    useQueryClient,  
-    useMutation
-} from 'react-query';
+    useMutation,
+    useQueryClient
+} from '@tanstack/react-query';
 import {useNavigate, useParams} from 'react-router-dom';
 
+import { useSnackbar } from 'notistack';
 
 const getRegister = async (form) => {
 
@@ -21,7 +22,7 @@ function useRegister() {
 
 let { form } = useParams();
 
-return useQuery("Register", () => getRegister(form), {
+return useQuery(["Register"], () => getRegister(form), {
   refetchOnReconnect: false, 
   refetchOnWindowFocus: false 
 })
@@ -39,7 +40,7 @@ function useRegisters() {
 
 let { form } = useParams();
 
-return useQuery("Registers", () => getRegisters(form), {
+return useQuery(["Registers"], () => getRegisters(form), {
   refetchOnReconnect: false, 
   refetchOnWindowFocus: false 
 })
@@ -58,11 +59,44 @@ const getFamilies = async (id) => {
   return data;
 }; 
 
+const updateFamilies = async (id, newdata) => {
+  const { data } = await axios.put(
+    `/api/Familie/${id}`, { ...newdata })
+  return data;
+}; 
+
 function useFamilies(id) {
-  return useQuery(["Families", 200], () => getFamilies(id),
+
+  const { enqueueSnackbar } = useSnackbar();
+  const queryClient = useQueryClient()
+
+  const {status, data, error, isFetching} = useQuery(["Families"], () => getFamilies(id),
   {
     retry: false, 
   })
+
+  const { mutate: mutateUpdateFamilie } = useMutation(
+    ({id, data}) => updateFamilies(id, data),
+    {
+
+      onSuccess: async (familie) => {
+
+        queryClient.setQueryData(['Families'], (families) => {
+          const data = {
+            success: []
+          }
+
+          data.success = families.success.map(f => f.id === familie.success.id ? familie.success : f )
+          enqueueSnackbar('Mise a jour réussie !', { variant: 'success' });
+
+          return data
+          
+        })
+      },
+    }
+  )
+
+  return { status, data, error, isFetching, mutateUpdateFamilie}
 }
 
 
