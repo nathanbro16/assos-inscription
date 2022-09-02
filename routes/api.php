@@ -26,6 +26,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return $request->user();
     });
     Route::post('/registrations', [RegistrationsController::class, 'store']);
+    Route::put('/Familie/{id}', [MembersFamiliesController::class, 'update']);
     //Route::get('/registrations/{slug}/Families/', [MembersFamiliesController::class, 'indexoffamilies']);
 
 });

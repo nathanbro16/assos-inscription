@@ -46,4 +46,8 @@ class MembersFamilies extends Model
         return $this->belongsTo(Registrations::class);
     }
 
+    protected $casts = [
+        'CheckList' => 'array',
+    ];
 }
+

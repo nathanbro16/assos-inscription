@@ -109,12 +109,32 @@ class MembersFamiliesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\MembersFamilies  $membersFamilies
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MembersFamilies $membersFamilies)
+    public function update(Request $request, $membersFamilies)
     {
-        //
+        $Familie = MembersFamilies::find($membersFamilies); 
+        $this->validate($request, [
+            'last_name' => 'string',
+            'first_name_1' => 'string',
+            'first_name_2' => 'string',
+            'phone_1' => 'numeric|digits:10',
+            'phone_2' => 'numeric|digits:10',
+            'email' => 'email',
+        ]);
+
+        $data = $request->all();
+
+        foreach ($data as $key => $value) {
+            if (!empty($value)) {
+                $Familie->$key = $value; 
+            }
+        }
+
+        $Familie->save();
+        $Familie['Members'] = Members::where('members_families_id', $Familie['id'])->get();
+        return response()->json(['success' => $Familie ], 200);
+
     }
 
     /**
