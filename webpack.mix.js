@@ -11,7 +11,8 @@ const mix = require('laravel-mix');
  |
  */
 mix.browserSync({
-    proxy:'https://assos-inscription.test'
+    proxy:'https://assos-inscription.test',
+    browser: "chrome"
 })
 mix.js('resources/js/index.jsx', 'public/js')
     .react()
@@ -22,7 +23,7 @@ mix.js('resources/js/index.jsx', 'public/js')
     ])
     .alias({
         '@': 'resources/js',
-        '#css': 'resources/css',
+        '#': 'resources/css',
     });
 
     if (mix.inProduction()) {
