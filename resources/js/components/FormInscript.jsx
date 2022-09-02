@@ -35,7 +35,7 @@ import {
     useQuery,  
     useQueryClient,  
     useMutation
-} from 'react-query';
+} from '@tanstack/react-query';
 
 
 const createPost = async (data) => {

@@ -7,7 +7,7 @@ import {
     useQuery,  
     useQueryClient,  
     useMutation
-} from 'react-query';
+} from '@tanstack/react-query';
 
 import { format } from "date-fns";
 import fr from 'date-fns/locale/fr';
@@ -37,6 +37,8 @@ import {
 } from '@mui/material';
 
 import FormSteps from '@/components/FormSteps';
+
+import RegisterSteper from '@/pages/form/RegisterSteper/RegisterSteper';
 
 
 const FormLegals = () => {
@@ -196,9 +198,7 @@ export default function inscriptions() {
         <span>Error: {error.message}</span>
       ) : (      
       <React.Fragment>
-        <Container maxWidth="lg">
-          <FormSteps steps={steps} />
-        </Container>
+          <RegisterSteper/>
       </React.Fragment>
       )}
 

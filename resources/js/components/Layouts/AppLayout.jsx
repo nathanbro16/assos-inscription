@@ -8,7 +8,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import { Box, Button, Typography, LinearProgress } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import * as React from 'react';
-import { useIsFetching } from 'react-query';
+import { useIsFetching } from '@tanstack/react-query';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
