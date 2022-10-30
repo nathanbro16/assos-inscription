@@ -9,6 +9,8 @@ import Label from '@/components/Label'
 import { useAuth } from '@/hooks/auth'
 import { useState } from 'react'
 import { Link, NavLink} from 'react-router-dom';
+import '#/App.css';
+
 
 const Login = () => {
 

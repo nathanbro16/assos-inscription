@@ -232,7 +232,7 @@ const FamiliesList = () => {
               <TableHead>
                 <TableRow>
                   <TableCell />
-                  <TableCell>Dessert (100g serving)</TableCell>
+                  <TableCell>Nom de famile</TableCell>
                   <TableCell align="right">Calories</TableCell>
                   <TableCell align="right">Fat&nbsp;(g)</TableCell>
                   <TableCell align="right">Carbs&nbsp;(g)</TableCell>

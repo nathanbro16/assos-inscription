@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Members;
 use App\Models\MembersFamilies;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Enum;
 
 class MembersFamiliesController extends Controller
 {
@@ -58,27 +59,31 @@ class MembersFamiliesController extends Controller
     {
         $this->validate($request, [
             'registrations_id' => 'required|numeric',
-            'last_name' => 'required|string',
-            'first_name_1' => 'required|string',
-            'first_name_2' => 'required|string',
-            'first_name_1' => 'required|string',
-            'phone_1' => 'required|numeric|digits:10',
-            'phone_2' => 'required|numeric|digits:10',
-            'email' => 'required|email'
+            'lastName1' => 'required|string',
+            'lastName2' => 'required|string',
+            'firstName1' => 'required|string',
+            'firstName2' => 'required|string',
+            'Phone1' => 'required|numeric|digits:10',
+            'Phone2' => 'required|numeric|digits:10',
+            'Email1' => 'required|email',
+            'Email2' => 'required|email',
+            'members' => 'required',
+            'TypeIns' => [new Enum(TypeOfRegister::class)],
+
         ]);
 
-        $registrations = Registrations::create([
+        $result = MembersFamilies::create([
             'registrations_id' => $request->registrations_id,
-            'last_name' => 'required|string',
-            'first_name_1' => 'required|string',
-            'first_name_2' => 'required|string',
-            'first_name_1' => 'required|string',
-            'phone_1' => 'required|numeric|digits:10',
-            'phone_2' => 'required|numeric|digits:10',
-            'email' => 'required|email'
+            'last_name_1' => $request->last_name_1, 
+            'last_name_2' => $request->last_name_2, 
+            'first_name_1' => $request->first_name_1, 
+            'first_name_2' => $request->first_name_2,
+            'phone_1' => $request->phone_1,
+            'phone_2' => $request->phone_2, 
+            'email_1' => $request->email_1,
+            'email_2' => $request->email_2,
+            'type_of_register' => [new Enum(TypeOfRegister::class)],
         ]);
-
-        $result = $registrations;
 
         return response()->json(['success' => $result ], 200);
     }

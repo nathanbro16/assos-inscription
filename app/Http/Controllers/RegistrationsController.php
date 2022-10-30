@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Registrations;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class RegistrationsController extends Controller
@@ -16,7 +17,14 @@ class RegistrationsController extends Controller
      */
     public function index()
     {
-        $registing = Registrations::all();
+        if (Auth::check()) {
+            $registing = Registrations::all();
+
+            return response()->json(['success' => $registing], 200);
+        }
+        $registing = Registrations::query()
+            ->where('IsOpen', true)
+            ->get();
 
         return response()->json(['success' => $registing], 200);
     }
@@ -71,30 +79,47 @@ class RegistrationsController extends Controller
      */
     public function search($slug)
     {
+
+        if (Auth::check()) {
+            if (is_string($slug)) {
+                $search = Str::replace('-', ' ', $slug);
+                $regist = Registrations::where('Title', $search)
+                    ->first();
+            }
+    
+            if (is_numeric($slug)) {
+                $regist = Registrations::where('id', $slug)
+                    ->first();
+    
+            }
+    
+            if ($regist === null) {
+                return response()->json(['error' => "Erreur : Aucun formulaire n'a été trouvé !" ], 404);
+            }
+    
+            return response()->json($regist, 200);
+        }
+
         if (is_string($slug)) {
             $search = Str::replace('-', ' ', $slug);
             $regist = Registrations::query()
                 ->where('Title', $search)
-                ->get();
+                ->Where('IsOpen', 1)
+                ->first();
         }
 
         if (is_numeric($slug)) {
-            $regist = Registrations::query()
-                ->where('id', $slug)
-                ->get();
+            $regist = Registrations::where('id', $slug)
+                ->Where('IsOpen', 1)
+                ->first();
+
         }
 
-        if ($regist->count() === 0) {
-            return response()->json(['Error' => "Aucun formulaire trouvé !" ], 404);
+        if ($regist === null) {
+            return response()->json(['error' => "Erreur : Aucun formulaire n'a été trouvé !" ], 404);
         }
 
-        if ($regist->count() > 1) {
-            return response()->json(['Error' => "Trop de formulaire ont le même titre !" ], 404);
-        }
-        
-        return response()->json(['success' => [
-            "List" => $regist
-        ] ], 200);
+        return response()->json($regist, 200);
     }
 
     /**

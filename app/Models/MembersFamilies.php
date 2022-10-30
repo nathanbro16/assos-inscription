@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\FamilyState;
 use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,14 +22,17 @@ class MembersFamilies extends Model
     */
     protected $fillable = [
         'registrations_id',
-        'last_name',
+        'last_name_1',
+        'last_name_2',
         'first_name_1',
         'first_name_2',
         'phone_1',
         'phone_2',
-        'email',
+        'email_1',
+        'email_2',
         'CheckList',
-        'locked'
+        'locked',
+        'type_of_register'
 
     ];
 
@@ -47,7 +51,7 @@ class MembersFamilies extends Model
     }
 
     protected $casts = [
-        'CheckList' => 'array',
+        'CheckList' => 'array'
     ];
 }
 

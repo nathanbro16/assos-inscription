@@ -23,6 +23,7 @@ function useRegister() {
 let { form } = useParams();
 
 return useQuery(["Register"], () => getRegister(form), {
+  retry: false,
   refetchOnReconnect: false, 
   refetchOnWindowFocus: false 
 })
@@ -64,6 +65,11 @@ const updateFamilies = async (id, newdata) => {
     `/api/Familie/${id}`, { ...newdata })
   return data;
 }; 
+const AddFamilies = async (data) => {
+  const { returndata } = await axios.post(
+    `/api/Familie/`, { ...data })
+  return returndata;
+}; 
 
 function useFamilies(id) {
 
@@ -93,10 +99,29 @@ function useFamilies(id) {
           
         })
       },
-    }
+    })
+  const { mutate: mutateAddFamilie } = useMutation(
+      ({data}) => AddFamilies(data),
+      {
+  
+        onSuccess: async (familie) => {
+  
+          queryClient.setQueryData(['Families'], (families) => {
+            const data = {
+              success: []
+            }
+  
+            enqueueSnackbar('Mise a jour réussie !', { variant: 'success' });
+  
+            return families
+            
+          })
+        },
+      }
+    
   )
 
-  return { status, data, error, isFetching, mutateUpdateFamilie}
+  return { status, data, error, isFetching, mutateUpdateFamilie, mutateAddFamilie}
 }
 
 

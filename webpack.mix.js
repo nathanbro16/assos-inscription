@@ -21,6 +21,7 @@ mix.js('resources/js/index.jsx', 'public/js')
         require('tailwindcss'),
         require('autoprefixer'),
     ])
+    .options({ autoprefixer: false })
     .alias({
         '@': 'resources/js',
         '#': 'resources/css',

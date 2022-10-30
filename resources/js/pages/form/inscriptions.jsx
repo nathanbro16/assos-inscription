@@ -1,6 +1,10 @@
 import {useRegister} from '@/hooks/registering';
 import React, { Children } from 'react';
 
+import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+
 import { useParams } from 'react-router-dom';
 
 import { 
@@ -39,6 +43,13 @@ import {
 import FormSteps from '@/components/FormSteps';
 
 import RegisterSteper from '@/pages/form/RegisterSteper/RegisterSteper';
+import { useForm, FormProvider } from 'react-hook-form';
+
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+
+
 
 
 const FormLegals = () => {
@@ -170,9 +181,57 @@ const Formlicencis = () => {
 }
 
 export default function inscriptions() {
+
+  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
+  const preloade = { FirstName: "", LastName: "", Email: "", Phone: "", Address: "", Birthday: null, Rank: null }
+  const schema = yup.object({
+    TypeIns: yup.string().nullable().required("Merci de séléctioner une case"),
+    Email1 : yup.string().email("Email non valide").required("Ce champs est requis"),
+    Email2 : yup.string().email("Email non valide"),
+    Phone1: yup.string().matches(phoneRegExp, {message: 'Numéro de téléphone non valide', excludeEmptyString: true }).required('Ce champs est requis'),
+    Phone2: yup.string().matches(phoneRegExp, {message: 'Numéro de téléphone non valide', excludeEmptyString: true }),
+    FirstName1: yup.string().max(60, "Le nom est supérieure a 60 caractères").required('Ce champs est requis'),
+    FirstName2: yup.string().max(60, "Le nom est supérieure a 60 caractères"),
+    LastName1: yup.string().max(60, "Le nom est supérieure a 60 caractères").required('Ce champs est requis'),
+    LastName2: yup.string().max(60, "Le nom est supérieure a 60 caractères"),
+    Members: yup.array()
+          .of(
+            yup.object().shape({
+                LastName: yup.string()
+                  .required("Le nom est requis"),
+                FirstName: yup.string()
+                  .required("Le prénom est requis"),
+                Phone: yup.string()
+                  .matches(phoneRegExp, {message: 'Numéro de téléphone non valide', excludeEmptyString: true }),
+                Address: yup.string().required("L'adresse est requise"),
+                Birthday: yup.date().typeError("La date de naissance est requise").required().max(new Date(), "L'age minimum est de 6 ans !"),
+                Email: yup.string().email('Email non valide'),
+                Rank: yup.string().nullable().required("Le grade est requis")
+
+
+
+            })
+          )
+          .min(1, "Vous devez renseigner au minimum un licencié")
+          .required("Le champs membres est requis")
+    
+});
+
         
     const queryClient = useQueryClient();
     const { status, data, error, isFetching } = useRegister();
+    const methods = useForm({
+      defaultValues: {     
+
+        Members: [preloade]
+      },
+      resolver: yupResolver(schema),
+  });
+    const { watch, errors } = methods;
+    const navigate = useNavigate();
+
+
     const steps = [
       {
         Name : 'Responsable legals',
@@ -191,19 +250,39 @@ export default function inscriptions() {
       }
     ];
 
-    return (<div>
-      {status === 'loading' ? (
-        'Loading...'
-      ) : status === 'error' ? (
-        <span>Error: {error.message}</span>
-      ) : (      
-      <React.Fragment>
-          <RegisterSteper/>
-      </React.Fragment>
-      )}
 
-  
-        
-      </div>
+
+    if (status === 'loading') {
+      return ('Loading...')
+    }
+    if (status === 'error') {
+      if (error.response.status === 404) {
+        return (
+          <React.Fragment>
+            <span>{error.response.data?.error}</span>
+            <pre>{JSON.stringify(error.response, null, 4)}</pre>
+          </React.Fragment>
+        )
+      }
+      return (
+        <React.Fragment>
+          <span>{error.response.data?.error}</span>
+          <pre>{JSON.stringify(error.response, null, 4)}</pre>
+        </React.Fragment>
+      )
+    }
+    if (status === 'success') {
+      return (      
+        <React.Fragment>
+          <FormProvider {...methods} >
+            <RegisterSteper Register={data} />
+          </FormProvider>
+        </React.Fragment>
+      )
+    }
+    return (      
+      <React.Fragment>
+        <H1>Error générale</H1>
+      </React.Fragment>
     )
 }

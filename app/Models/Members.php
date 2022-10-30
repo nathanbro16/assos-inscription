@@ -18,6 +18,7 @@ class Members extends Model
         'phone',
         'email',
         'rank',
+        'gender'
 
     ];
 
