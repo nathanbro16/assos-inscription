@@ -54,7 +54,7 @@ export default function ListForm() {
                                   ) }
                                 Description={"description" }
                                 Actions={(
-                                    <Button size="small" onClick={() => navigate('../inscr/'+form.id)}>S'incrire</Button>
+                                    <Button size="small" onClick={() => navigate('/form/inscr/'+form.id)}>S'incrire</Button>
                                 )} />
                             </Grid>  
                         )
