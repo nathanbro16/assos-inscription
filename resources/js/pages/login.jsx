@@ -2,7 +2,7 @@ import ApplicationLogo from '@/components/ApplicationLogo'
 import AuthCard from '@/components/AuthCard'
 import AuthSessionStatus from '@/components/AuthSessionStatus'
 import AuthValidationErrors from '@/components/AuthValidationErrors'
-import Button from '@/components/Button'
+//import Button from '@/components/Button'
 import GuestLayout from '@/components/Layouts/GuestLayout'
 import Input from '@/components/Input'
 import Label from '@/components/Label'
@@ -10,6 +10,22 @@ import { useAuth } from '@/hooks/auth'
 import { useState } from 'react'
 import { Link, NavLink} from 'react-router-dom';
 import '#/App.css';
+import {
+  Container, 
+  CssBaseline,
+  Button,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link as LinkMui,
+  Grid,
+  Box,
+  Typography,
+  Avatar,
+  FormHelperText,
+} from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 
 const Login = () => {
@@ -29,75 +45,95 @@ const Login = () => {
     login({ email, password, setErrors, setStatus })
   }
 
+  const theme = createTheme();
+
   return (
+
     <GuestLayout>
-      <AuthCard
-        logo={
-          <Link to="/">
-            <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
-          </Link>
-        }>
-        {/* Session Status */}
-        <AuthSessionStatus className="mb-4" status={status} />
-        {/* Validation Errors */}
-        <AuthValidationErrors className="mb-4" errors={errors} />
-        <form onSubmit={submitForm}>
-          {/* Email Address */}
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input
+      <ThemeProvider theme={theme}>
+        <Container maxWidth="xs" component="main">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Box component="form" onSubmit={submitForm} sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
               id="email"
-              type="email"
               value={email}
-              className="block mt-1 w-full"
               onChange={event => setEmail(event.target.value)}
-              required
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              error={Boolean(errors.length)}
               autoFocus
+              helperText="Incorrect entry."
             />
-          </div>
-          {/* Password */}
-          <div className="mt-4">
-            <Label htmlFor="password">Mot de passe</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              className="block mt-1 w-full"
-              onChange={event => setPassword(event.target.value)}
+            <TextField
+              margin="normal"
               required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              error={Boolean(errors.length)}
+              value={password}
+              onChange={event => setPassword(event.target.value)}
+              id="password"
               autoComplete="current-password"
             />
-          </div>
-          {/* Remember Me */}
-          <div className="block mt-4">
-            <label
-              htmlFor="remember_me"
-              className="inline-flex items-center">
-              <input
-                id="remember_me"
-                type="checkbox"
-                name="remember"
-                className="rounded border-gray-300 text-indigo-600
-                shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              />
-              <span className="ml-2 text-sm text-gray-600">
-                  Remember me
-              </span>
-            </label>
-          </div>
-          <div className="flex items-center justify-end mt-4">
-            <NavLink
-              to="/forgot-password"
-              className="underline text-sm text-gray-600 hover:text-gray-900"
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <FormHelperText error={Boolean(errors.length)}>
+              <ul>
+                {errors.map(error => (
+                  <li key={error}>{error}</li>
+                ))}
+              </ul>
+            </FormHelperText>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
             >
-                Mot de passe oublié
-            </NavLink>
-            <Button className="ml-3">
-                Connexion
+              Sign In
             </Button>
-          </div>
-        </form>
-      </AuthCard>
+            <Grid container>
+              <Grid item xs>
+                <LinkMui href="#" variant="body2">
+                  Forgot password?
+                </LinkMui>
+              </Grid>
+              <Grid item>
+                <LinkMui href="#" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </LinkMui>
+              </Grid>
+            </Grid>
+            
+          </Box>
+          </Box>
+        </Container>
+      </ThemeProvider>
+        {/* Session Status */}
+        <AuthSessionStatus className="mb-4" status={status} />
+     
     </GuestLayout>
   )
 }

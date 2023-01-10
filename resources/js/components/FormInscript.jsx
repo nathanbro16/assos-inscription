@@ -36,6 +36,8 @@ import {
     useQueryClient,  
     useMutation
 } from '@tanstack/react-query';
+import CreatableSelect from 'react-select/creatable';
+
 
 
 const createPost = async (data) => {
@@ -121,6 +123,7 @@ function ModalInscript({open, handleClose}) {
                             error={Boolean(errors.IsSuccess)}
                             helperText={errors.IsSuccess?.message}
                         />
+                        <CreatableSelect isMulti />
 
                         <TextField
                             label="Check-List"
