@@ -37,12 +37,13 @@ const Login = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [remember, setRemember] = useState(false)
   const [errors, setErrors] = useState([])
   const [status, setStatus] = useState(null)
 
   const submitForm = async event => {
     event.preventDefault()
-    login({ email, password, setErrors, setStatus })
+    login({ remember, email, password, setErrors, setStatus })
   }
 
   const theme = createTheme();
@@ -65,7 +66,7 @@ const Login = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Authentification
           </Typography>
           <Box component="form" onSubmit={submitForm} sx={{ mt: 1 }}>
             <TextField
@@ -75,19 +76,18 @@ const Login = () => {
               id="email"
               value={email}
               onChange={event => setEmail(event.target.value)}
-              label="Email Address"
+              label="Adresse email"
               name="email"
               autoComplete="email"
               error={Boolean(errors.length)}
               autoFocus
-              helperText="Incorrect entry."
             />
             <TextField
               margin="normal"
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Mot de passe"
               type="password"
               error={Boolean(errors.length)}
               value={password}
@@ -97,7 +97,8 @@ const Login = () => {
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="Se souvenir de moi"
+              onChange={event => setRemember(event.target.checked)}
             />
             <FormHelperText error={Boolean(errors.length)}>
               <ul>
@@ -112,17 +113,12 @@ const Login = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Connection
             </Button>
             <Grid container>
               <Grid item xs>
                 <LinkMui href="#" variant="body2">
-                  Forgot password?
-                </LinkMui>
-              </Grid>
-              <Grid item>
-                <LinkMui href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  Mot de passe oublié ?
                 </LinkMui>
               </Grid>
             </Grid>
